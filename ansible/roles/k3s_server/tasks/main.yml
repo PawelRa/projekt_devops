@@ -1,0 +1,16 @@
+---
+- name: Pobierz instalator K3s
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/install-k3s.sh
+    mode: "0755"
+
+- name: Zainstaluj K3s Server
+  ansible.builtin.command:
+    cmd: /tmp/install-k3s.sh
+    creates: /usr/local/bin/k3s
+  environment:
+    INSTALL_K3S_EXEC: >-
+      server
+      --node-ip={{ k3s_node_ip }}
+      --advertise-address={{ k3s_node_ip }}

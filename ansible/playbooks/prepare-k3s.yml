@@ -1,0 +1,51 @@
+---
+- name: Przygotowanie hostów pod K3s
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Aktualizacja cache pakietów
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Aktualizacja wszystkich pakietów
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Instalacja podstawowych narzędzi
+      ansible.builtin.apt:
+        name:
+          - curl
+          - wget
+          - vim
+          - git
+          - unzip
+          - net-tools
+          - htop
+          - jq
+        state: present
+
+    - name: Sprawdzenie stanu swap
+      ansible.builtin.command: swapon --show
+      register: swap_status
+      changed_when: false
+
+    - name: Wyświetlenie informacji o swap
+      ansible.builtin.debug:
+        var: swap_status.stdout_lines
+
+    - name: Wyświetlenie hostname
+      ansible.builtin.debug:
+        msg: "Host {{ ansible_hostname }} przygotowany do instalacji K3s"
+
+    - name: Wyłącz swap
+      ansible.builtin.command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: Wyłącz swap w fstab
+      ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^/swap.img'
+        replace: '# /swap.img'

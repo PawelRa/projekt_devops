@@ -1,0 +1,8 @@
+---
+- name: Test komunikacji Ansible
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Wykonaj test ping
+      ansible.builtin.ping:

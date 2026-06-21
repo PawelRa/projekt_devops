@@ -1,0 +1,13 @@
+---
+- name: Zbierz informacje o hostach
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Wyświetl hostname
+      debug:
+        msg: "{{ ansible_hostname }}"
+
+    - name: Wyświetl adres IP
+      debug:
+        msg: "{{ ansible_default_ipv4.address }}"

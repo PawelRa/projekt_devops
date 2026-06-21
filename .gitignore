@@ -1,0 +1,12 @@
+*.retry
+*.swp
+*.bak
+
+.venv/
+venv/
+
+__pycache__/
+
+*.log
+
+.env

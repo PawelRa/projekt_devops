@@ -1,0 +1,8 @@
+---
+- name: Informacje o sieci
+  hosts: all
+
+  tasks:
+    - name: Pokaż wszystkie adresy IPv4
+      debug:
+        var: ansible_all_ipv4_addresses
